@@ -6,7 +6,21 @@ const getEmployees = async function(req, res, next) {
     res.json(rows)
 }
 
-const postEmployees = async function(req, res, next) {
+const getEmployee= async (req,res)=>{
+    console.log(req.params.id)
+    const [rows] = await pool.query('SELECT * FROM employee WHERE id = ?', [req.params.id])
+    console.log(rows)
+
+    if (rows.length<=0){
+        return res.status(404).json({
+            message: 'Empleado no encontrado'
+        })
+    }
+
+    res.json(rows[0])
+}
+
+const postEmployee = async function(req, res, next) {
 
     const {name,salary}=req.body
     const [rows]= await pool.query('INSERT INTO employee (name,salary) VALUES (?,?)',[name,salary])
@@ -18,17 +32,38 @@ const postEmployees = async function(req, res, next) {
     })
 }
 
-const putEmployees = function(req, res, next) {
-    res.send("Actualizando empleados")
+const putEmployee = async function(req, res, next) {
+    const {id} = req.params
+    const {name, salary} = req.body
+    const [rows] = await pool.query('UPDATE employee SET NAME = IFNULL(?, name), salary = IFNULL(?, salary) WHERE id = ?',[name,salary,id])
+    if (rows.affectedRows<=0) {
+        return res.status(404).json({
+            message: 'Empleado no encontrado'
+        })
+    }
+    const [result] = await pool.query('SELECT * FROM employee WHERE id = ?', [id])
+
+    res.json(result[0])
+
 }
 
-const deleteEmployees = function(req, res, next) {
-    res.send("Eliminando empleados")
+const deleteEmployee = async function(req, res, next) {
+    const [rows] = await pool.query('DELETE FROM employee WHERE id = ?', [req.params.id])
+    console.log(rows)
+
+    if (rows.affectedRows<=0) {
+        return res.status(404).json({
+            message: 'Empleado no encontrado'
+        })
+    }
+
+    res.sendStatus(204)
 }
 
 module.exports={
     getEmployees,
-    postEmployees,
-    putEmployees,
-    deleteEmployees
+    getEmployee,
+    postEmployee,
+    putEmployee,
+    deleteEmployee
 }
