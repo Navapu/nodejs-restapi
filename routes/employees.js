@@ -1,18 +1,19 @@
 const express = require('express');
 const router = express.Router();
-
-router.get('/employees', function(req, res, next) {
-    res.send("Obteniendo empleados");
-  });
-router.post('/employees', function(req, res, next) {
-    res.send("Añadiendo empleados");
-});
-router.put('/employees', function(req, res, next) {
-    res.send("Actualizando empleados");
-});
-router.delete('/employees', function(req, res, next) {
-    res.send("Eliminando empleados");
-});
+const getEmployees=require("../controllers/employees.controller")
+const postEmployees=require("../controllers/employees.controller")
+const putEmployees=require("../controllers/employees.controller")
+const deleteEmployees=require("../controllers/employees.controller")
 
 
+router.get('/employees', getEmployees);
+
+router.post('/employees', postEmployees);
+
+
+router.put('/employees', putEmployees);
+
+router.delete('/employees', deleteEmployees);
+  
+  
   module.exports = router;
