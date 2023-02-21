@@ -1,6 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const pool= require('../db.js')
 
+/* GET home page. */
+router.get('/ping', async function(req, res, next) {
+  const [result] = await pool.query('SELECT 1+1 as result')
+  res.json(result);
+});
 router.get('/', function(req, res, next) {
   res.send("Hola mundo");
 });
