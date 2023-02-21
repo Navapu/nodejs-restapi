@@ -14,7 +14,9 @@ const deleteEmployees = function(req, res, next) {
     res.send("Eliminando empleados")
 }
 
-module.exports=getEmployees
-module.exports=postEmployees
-module.exports=putEmployees
-module.exports=deleteEmployees
+module.exports={
+    getEmployees,
+    postEmployees,
+    putEmployees,
+    deleteEmployees
+}
